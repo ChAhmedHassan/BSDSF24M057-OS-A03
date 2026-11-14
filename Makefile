@@ -1,0 +1,21 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -g -Iinclude
+LDFLAGS =
+SRC = $(wildcard src/*.c)
+OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
+TARGET = bin/myshell
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	@mkdir -p bin
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+obj/%.o: src/%.c include/shell.h
+	@mkdir -p obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f obj/*.o $(TARGET)
+
+.PHONY: all clean
