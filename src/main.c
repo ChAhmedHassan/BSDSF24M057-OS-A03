@@ -43,7 +43,10 @@ int main(void)
         add_to_history(line);
         add_history(line);
 
-        process_line(line);
+        if (is_if_command(line))
+            handle_if(line);
+        else
+            process_line(line);
         free(line);
     }
     return 0;

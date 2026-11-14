@@ -34,6 +34,10 @@ void print_jobs(void);
 
 /* NEW PROTOTYPES GO BELOW THIS LINE */
 
+/* ifelse.c */
+int is_if_command(const char *line);
+int handle_if(const char *first_line);
+
 /* jobs.c / chain.c */
 void add_job(pid_t pid, const char *cmd);
 void reap_background(void);
