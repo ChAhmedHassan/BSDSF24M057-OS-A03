@@ -10,6 +10,7 @@ static void builtin_help(void)
     printf("  help       show this message\n");
     printf("  jobs       list background jobs\n");
     /* NEW HELP LINES GO BELOW THIS LINE */
+    printf("  set        show all shell variables\n");
     printf("  history    show the command history\n");
 }
 
