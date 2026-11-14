@@ -10,6 +10,7 @@ static void builtin_help(void)
     printf("  help       show this message\n");
     printf("  jobs       list background jobs\n");
     /* NEW HELP LINES GO BELOW THIS LINE */
+    printf("  history    show the command history\n");
 }
 
 /* Returns 1 if arglist[0] was a built-in (and has been run), else 0. */
@@ -43,5 +44,10 @@ int handle_builtin(char **arglist)
         return 1;
     }
     /* NEW BUILT-INS GO BELOW THIS LINE */
+    if (strcmp(arglist[0], "history") == 0) {
+        print_history();
+        last_status = 0;
+        return 1;
+    }
     return 0;
 }

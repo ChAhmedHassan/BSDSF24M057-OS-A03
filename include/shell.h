@@ -13,6 +13,7 @@
 #define PROMPT     "myshell> "
 #define MAX_LINE   1024
 #define MAX_TOKENS 128
+#define HISTORY_SIZE 20
 
 extern int last_status;
 
@@ -33,5 +34,10 @@ int execute(char **arglist);
 void print_jobs(void);
 
 /* NEW PROTOTYPES GO BELOW THIS LINE */
+
+/* history.c */
+void add_to_history(const char *line);
+void print_history(void);
+const char *get_history(int n);
 
 #endif
