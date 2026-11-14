@@ -14,7 +14,6 @@ static int is_blank(const char *s)
 int main(void)
 {
     char *line;
-    char *tokens[MAX_TOKENS];
 
     while (1) {
         line = read_line(PROMPT);
@@ -27,7 +26,6 @@ int main(void)
             continue;
         }
 
-        /* "!n": replace the line by the n-th command in the history */
         if (line[0] == '!') {
             const char *old = get_history(atoi(line + 1));
             if (old == NULL) {
@@ -41,12 +39,9 @@ int main(void)
         }
 
         add_to_history(line);
-        add_history(line);          /* also feed Readline (arrow keys) */
+        add_history(line);
 
-        int n = tokenize(line, tokens);
-        if (!handle_builtin(tokens))
-            execute(tokens);
-        free_tokens(tokens, n);
+        run_line(line);
         free(line);
     }
     return 0;
