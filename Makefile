@@ -1,9 +1,9 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g -Iinclude
+CC      = gcc
+CFLAGS  = -Wall -Wextra -g -Iinclude
 LDFLAGS =
-SRC = $(wildcard src/*.c)
-OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
-TARGET = bin/myshell
+SRC     = $(wildcard src/*.c)
+OBJ     = $(patsubst src/%.c, obj/%.o, $(SRC))
+TARGET  = bin/myshell
 
 all: $(TARGET)
 

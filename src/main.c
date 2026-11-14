@@ -1,22 +1,24 @@
 #include "shell.h"
 
-int main() {
-    char* cmdline;
-    char** arglist;
+int main(void)
+{
+    char *line;
+    char *tokens[MAX_TOKENS];
 
-    while ((cmdline = read_cmd(PROMPT, stdin)) != NULL) {
-        if ((arglist = tokenize(cmdline)) != NULL) {
-            execute(arglist);
-
-            // Free the memory allocated by tokenize()
-            for (int i = 0; arglist[i] != NULL; i++) {
-                free(arglist[i]);
-            }
-            free(arglist);
+    while (1) {
+        line = read_line(PROMPT);
+        if (line == NULL) {              /* Ctrl+D */
+            printf("\n");
+            break;
         }
-        free(cmdline);
-    }
 
-    printf("\nShell exited.\n");
+        int n = tokenize(line, tokens);
+        if (n > 0) {
+            if (!handle_builtin(tokens))     /* built-in? run inside the shell */
+                execute(tokens);             /* otherwise fork-exec-wait */
+        }
+        free_tokens(tokens, n);
+        free(line);
+    }
     return 0;
 }

@@ -1,62 +1,47 @@
 #include "shell.h"
 
-char* read_cmd(char* prompt, FILE* fp) {
-    printf("%s", prompt);
-    char* cmdline = (char*) malloc(sizeof(char) * MAX_LEN);
-    int c, pos = 0;
+int last_status = 0;      /* exit status of the most recent command */
 
-    while ((c = getc(fp)) != EOF) {
-        if (c == '\n') break;
-        cmdline[pos++] = c;
-    }
-
-    if (c == EOF && pos == 0) {
-        free(cmdline);
-        return NULL; // Handle Ctrl+D
-    }
-    
-    cmdline[pos] = '\0';
-    return cmdline;
+static void builtin_help(void)
+{
+    printf("Built-in commands:\n");
+    printf("  cd <dir>   change the current directory\n");
+    printf("  exit       leave the shell\n");
+    printf("  help       show this message\n");
+    printf("  jobs       list background jobs\n");
+    /* NEW HELP LINES GO BELOW THIS LINE */
 }
 
-char** tokenize(char* cmdline) {
-    // Edge case: empty command line
-    if (cmdline == NULL || cmdline[0] == '\0' || cmdline[0] == '\n') {
-        return NULL;
+/* Returns 1 if arglist[0] was a built-in (and has been run), else 0. */
+int handle_builtin(char **arglist)
+{
+    if (arglist[0] == NULL)
+        return 0;
+
+    if (strcmp(arglist[0], "exit") == 0) {
+        printf("Goodbye!\n");
+        exit(0);
     }
-
-    char** arglist = (char**)malloc(sizeof(char*) * (MAXARGS + 1));
-    for (int i = 0; i < MAXARGS + 1; i++) {
-        arglist[i] = (char*)malloc(sizeof(char) * ARGLEN);
-        bzero(arglist[i], ARGLEN);
-    }
-
-    char* cp = cmdline;
-    char* start;
-    int len;
-    int argnum = 0;
-
-    while (*cp != '\0' && argnum < MAXARGS) {
-        while (*cp == ' ' || *cp == '\t') cp++; // Skip leading whitespace
-        
-        if (*cp == '\0') break; // Line was only whitespace
-
-        start = cp;
-        len = 1;
-        while (*++cp != '\0' && !(*cp == ' ' || *cp == '\t')) {
-            len++;
+    if (strcmp(arglist[0], "cd") == 0) {
+        const char *dir = arglist[1] ? arglist[1] : getenv("HOME");
+        if (dir == NULL || chdir(dir) != 0) {
+            perror("cd");
+            last_status = 1;
+        } else {
+            last_status = 0;
         }
-        strncpy(arglist[argnum], start, len);
-        arglist[argnum][len] = '\0';
-        argnum++;
+        return 1;
     }
-
-    if (argnum == 0) { // No arguments were parsed
-        for(int i = 0; i < MAXARGS + 1; i++) free(arglist[i]);
-        free(arglist);
-        return NULL;
+    if (strcmp(arglist[0], "help") == 0) {
+        builtin_help();
+        last_status = 0;
+        return 1;
     }
-
-    arglist[argnum] = NULL;
-    return arglist;
+    if (strcmp(arglist[0], "jobs") == 0) {
+        print_jobs();
+        last_status = 0;
+        return 1;
+    }
+    /* NEW BUILT-INS GO BELOW THIS LINE */
+    return 0;
 }
