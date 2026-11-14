@@ -34,6 +34,11 @@ void print_jobs(void);
 
 /* NEW PROTOTYPES GO BELOW THIS LINE */
 
+/* jobs.c / chain.c */
+void add_job(pid_t pid, const char *cmd);
+void reap_background(void);
+int process_line(const char *line);
+
 /* parser.c / execute.c: pipelines */
 #define MAX_ARGS 64
 #define MAX_CMDS 16

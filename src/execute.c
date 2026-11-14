@@ -67,6 +67,10 @@ int execute_pipeline(Pipeline *p)
     }
 
     /* BACKGROUND HANDLING GOES BELOW THIS LINE */
+    if (p->background) {                     /* do NOT wait: remember the job */
+        add_job(pids[p->n - 1], p->text);
+        return 0;
+    }
 
     /* foreground: wait for every process of the pipeline */
     int status = 0;

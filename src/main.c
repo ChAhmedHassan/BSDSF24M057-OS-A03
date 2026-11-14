@@ -16,6 +16,8 @@ int main(void)
     char *line;
 
     while (1) {
+        reap_background();                   /* collect finished background jobs */
+
         line = read_line(PROMPT);
         if (line == NULL) {
             printf("\n");
@@ -41,7 +43,7 @@ int main(void)
         add_to_history(line);
         add_history(line);
 
-        run_line(line);
+        process_line(line);
         free(line);
     }
     return 0;
