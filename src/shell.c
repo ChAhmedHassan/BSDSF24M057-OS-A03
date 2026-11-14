@@ -44,6 +44,19 @@ int handle_builtin(char **arglist)
         return 1;
     }
     /* NEW BUILT-INS GO BELOW THIS LINE */
+    if (is_assignment(arglist[0])) {             /* NAME=value */
+        char *eq = strchr(arglist[0], '=');
+        *eq = '\0';
+        set_var(arglist[0], eq + 1);
+        *eq = '=';
+        last_status = 0;
+        return 1;
+    }
+    if (strcmp(arglist[0], "set") == 0) {
+        print_vars();
+        last_status = 0;
+        return 1;
+    }
     if (strcmp(arglist[0], "history") == 0) {
         print_history();
         last_status = 0;

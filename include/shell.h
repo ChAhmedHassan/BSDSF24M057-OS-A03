@@ -34,6 +34,13 @@ void print_jobs(void);
 
 /* NEW PROTOTYPES GO BELOW THIS LINE */
 
+/* vars.c */
+void set_var(const char *name, const char *value);
+const char *get_var(const char *name);
+void print_vars(void);
+int is_assignment(const char *s);
+void expand_variables(char **tokens, int ntok);
+
 /* ifelse.c */
 int is_if_command(const char *line);
 int handle_if(const char *first_line);

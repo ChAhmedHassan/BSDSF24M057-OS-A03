@@ -92,6 +92,7 @@ int run_line(const char *line)
         return 0;
 
     /* EXPANSION GOES BELOW THIS LINE */
+    expand_variables(tokens, ntok);
 
     Pipeline p;
     int status;
