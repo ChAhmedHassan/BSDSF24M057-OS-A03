@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <readline/history.h>
 
 static int is_blank(const char *s)
 {
@@ -40,6 +41,7 @@ int main(void)
         }
 
         add_to_history(line);
+        add_history(line);          /* also feed Readline (arrow keys) */
 
         int n = tokenize(line, tokens);
         if (!handle_builtin(tokens))
